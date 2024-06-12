@@ -45,7 +45,6 @@ with effect.terminal_output() as terminal:
 
 
 
-
 from terminaltexteffects.effects.effect_decrypt import Decrypt
 effect = Decrypt("YourTextHere")
 with effect.terminal_output() as terminal:
