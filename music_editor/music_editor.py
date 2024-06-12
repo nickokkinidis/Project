@@ -21,10 +21,10 @@ def main():
 
 
 def welcome_user():
-    print("\n - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n")
+    print("\n", "- " * 20, "\n")
     print("Welcome to the Music Editor!")
     print("This program will help you edit your music's info.")
-    print("\n - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n")
+    print("\n", "- " * 20, "\n")
     check_to_continue()
 
 
@@ -61,14 +61,16 @@ def process_mp3_files(folder_path, new_folder_path):
             source_path = os.path.join(folder_path, filename)
             audio = MP3(source_path, ID3=EasyID3)
 
-            print("\n - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n")
+            # Print the original tags
+            print("\n", "- " * 20, "\n")
             print(f"Processing: {filename}")
             print(f"Title: {audio.get('title', ['Unknown'])[0]}")
             print(f"Composer: {audio.get('composer', ['Unknown'])[0]}")
             print(f"Artist: {audio.get('artist', ['Unknown'])[0]}")
             print(f"Album: {audio.get('album', ['Unknown'])[0]}")
-            print("\n - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n")
-            
+            print("\n", "- " * 20, "\n")
+
+            # Edit the tags
             audio['title'] = input("Enter new title: ")
             audio['composer'] = input("Enter new composer: ")
             audio['artist'] = input("Enter new artist: ")
