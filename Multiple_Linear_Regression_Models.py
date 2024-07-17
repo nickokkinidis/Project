@@ -17,7 +17,7 @@ import numpy as np
 import statsmodels.formula.api as smf
 
 # 1. All-in
-def all_in(X, y):
+#def all_in(X, y):
 
 
 
