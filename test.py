@@ -6,6 +6,7 @@ import statsmodels.formula.api as smf
 """
 Note: Remove spaces and special characters from the column names.
 TODO: make cat not hardcoded
+tet
 """
 
 def backward_elimination(df):
