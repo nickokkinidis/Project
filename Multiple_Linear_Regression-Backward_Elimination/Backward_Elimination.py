@@ -11,7 +11,7 @@ add corected r2
 
 def main():
     # Read the target data set
-    df = pd.read_csv('P12-50-Startups.csv')
+    df = pd.read_csv('Dataset.csv')
 
     df_num = convert_categorical_to_numeric(df)
 

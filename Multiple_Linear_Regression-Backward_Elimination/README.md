@@ -7,12 +7,13 @@ Backward elimination is a stepwise regression technique used to select the most 
 
 # What does this program exactly do?
 
-    1. Defines the `backward_elimination` function that takes a DataFrame as a parameter.
-    Note: Remove spaces and special characters from the column names in the data set, at the moment it can't handle them.
-    2. Prompts the user for the target variable and the desired significance level.
-    3. Runs the multiple linear regression with all the variables (excluding the target variable) and finds their p-values.
-    4. Removes the variable with the highest p-value if it is above the significance level.
-    5. Repeats steps 3 and 4 until only the relevant variables remain in the model.
+    1. Opens the data set.
+    2. Converts categorical variables to numerical.
+    3. Prompts the user for the target variable and the desired significance level.
+    4. Runs the multiple linear regression with all the variables (excluding the target variable) and finds their p-values.
+    5. Removes the variable with the highest p-value if it is above the significance level.
+    6. Checks to see if the adjusted R squared is reduced.
+    7. Repeats until only the relevant variables remain in the model and adjusted R squared is not reduced.
 
 # Libraries:
 
@@ -20,12 +21,3 @@ Backward elimination is a stepwise regression technique used to select the most 
     2. numpy
     3. pandas
     4. statsmodels.formula.api
-
-# Example Usage:
-
-    #Read the data set
-    df = pd.read_csv('Dataset.csv')
-    #Convert categorical variables to numeric, this will be included in the code at some point
-    df['State'] = df['State'].astype('category').cat.codes
-    #Call the backward_elimination function
-    model = backward_elimination(df)
