@@ -1,1 +1,5 @@
-This is my first project that will help me get into using GitHub and VSC. At the moment it took me 2 hours to just set it up.
+Greetings,
+
+In this repository, you'll find a collection of projects I've worked on.
+I invite you to explore them and feel free to reach out if you have any questions or feedback.
+
