@@ -20,4 +20,5 @@ Backward elimination is a stepwise regression technique used to select the most 
     1. matplotlib.pyplot
     2. numpy
     3. pandas
-    4. statsmodels.formula.api
+    4. re
+    5. statsmodels.formula.api
