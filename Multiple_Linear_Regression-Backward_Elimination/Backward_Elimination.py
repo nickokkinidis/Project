@@ -1,48 +1,57 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import re
 import statsmodels.formula.api as smf
 
 """
-Note: Remove spaces and special characters from the column names.
-TODO: make cat not hardcoded
-add corected r2
+TODO: inlcude the adjusted R squared check.
 """
 
 def main():
-    # Read the target data set
+
+    # read the target data set
     df = pd.read_csv('Dataset.csv')
 
+    # convert categorical columns to numeric
     df_num = convert_categorical_to_numeric(df)
 
-    print(df_num)
-    
+    # clean column names
+    df_clean = clean_column_names(df_num)
 
-    #print(df)
-   # model = backward_elimination(df)
+    # run backward elimination
+    model = backward_elimination(df_clean)
 
-
+    # print the final model
+    print(model.summary())
 
 def convert_categorical_to_numeric(df):
-    # Get the categorical columns
+    # get the categorical columns
     categorical_columns = []
     for col in df.columns:
         if pd.api.types.is_categorical_dtype(df[col]) or df[col].dtype == 'object':
             categorical_columns.append(col)
 
-    # Initialize the merged DataFrame with the original DataFrame
+    # initialize the merged DataFrame with the original DataFrame
     merged = df.copy()
 
-    # Generate dummies for each categorical column and concatenate them to the original DataFrame
+    # generate dummies for each categorical column and concatenate them to the original DataFrame
     for col in categorical_columns:
         dummies = pd.get_dummies(df[col], prefix=col)
+        dummies = dummies.iloc[:, :-1]  # Drop the last dummy column
+        dummies = dummies.astype(int)   # Convert True/False to 1/0
         merged = pd.concat([merged, dummies], axis='columns')
-
-    # Drop the original categorical columns
+    
+    # drop the original categorical columns.
     merged = merged.drop(categorical_columns, axis='columns')
 
     return merged
 
+
+def clean_column_names(df):
+    df.columns = df.columns.str.replace(r'\s+', '_', regex=True)  # Replace spaces with underscores
+    df.columns = df.columns.str.replace(r'[^\w]', '', regex=True)  # Remove special characters
+    return df
 
 
 def backward_elimination(df):
@@ -67,11 +76,11 @@ def backward_elimination(df):
     while len(cols) > 0:
         # create linear regression table using the columns from cols
         formula = f"{target_variable} ~ " + ' + '.join(cols)
-        print(formula) # TODO: make style more nice
+        print(formula)
         model = smf.ols(formula=formula, data=df).fit()
     
         # find which column has the highest p-value
-        p_values = model.p_values.drop('Intercept')  # excluding the intercept
+        p_values = model.pvalues.drop('Intercept')  # excluding the intercept
         pmax = max(p_values)
         
         feature_with_pmax = p_values.idxmax()
@@ -85,11 +94,10 @@ def backward_elimination(df):
         print("No significant features were found.")
         return
     
-    # print the final model
+    # create the final model
     formula_final = f"{target_variable} ~ " + ' + '.join(cols)
     model_final = smf.ols(formula=formula_final, data=df).fit()
-    print(model_final.summary())
-    print("The remaining columns are:", cols)
+    print("\nThe remaining columns are:", cols)
 
     return model_final
 
