@@ -37,6 +37,7 @@ def convert_categorical_to_numeric(df):
 
     # generate dummies for each categorical column and concatenate them to the original DataFrame
     for col in categorical_columns:
+
         dummies = pd.get_dummies(df[col], prefix=col)
         dummies = dummies.iloc[:, :-1]  # Drop the last dummy column
         dummies = dummies.astype(int)   # Convert True/False to 1/0
@@ -49,6 +50,7 @@ def convert_categorical_to_numeric(df):
 
 
 def clean_column_names(df):
+    
     df.columns = df.columns.str.replace(r'\s+', '_', regex=True)  # Replace spaces with underscores
     df.columns = df.columns.str.replace(r'[^\w]', '', regex=True)  # Remove special characters
     return df
@@ -73,12 +75,24 @@ def backward_elimination(df):
     cols = list(df.columns)
     cols.remove(target_variable)
 
+    # create adjusted R squared
+    adjusted_r_squared = 0.0
+
     while len(cols) > 0:
         # create linear regression table using the columns from cols
         formula = f"{target_variable} ~ " + ' + '.join(cols)
         print(formula)
         model = smf.ols(formula=formula, data=df).fit()
     
+        # find new adjusted R squared
+        new_adjusted_r_squared = model.rsquared_adj
+
+        # check if the new adjusted R squared is greater than the previous
+        if new_adjusted_r_squared > adjusted_r_squared:
+            adjusted_r_squared = new_adjusted_r_squared
+        else:
+            break
+
         # find which column has the highest p-value
         p_values = model.pvalues.drop('Intercept')  # excluding the intercept
         pmax = max(p_values)
@@ -97,7 +111,7 @@ def backward_elimination(df):
     # create the final model
     formula_final = f"{target_variable} ~ " + ' + '.join(cols)
     model_final = smf.ols(formula=formula_final, data=df).fit()
-    print("\nThe remaining columns are:", cols)
+    print("\nThe remaining values are:", cols)
 
     return model_final
 
